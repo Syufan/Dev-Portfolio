@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/a64c4401-7a69-4936-938a-77974f0dbc85/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/WEBLIFE-DIABETES",
+    "appService.deploySubpath": "."
+}

@@ -1,0 +1,90 @@
+<div id="add_patient_page">
+    {{#each clinicianData}}
+    {{> sideNav }}
+    {{/each}}
+    {{!-- hello --}}
+    <div id="add_patient">
+        <h1>Create a new patient</h1>
+        <form action="" method="post" id="createFunction" onsubmit="return notification()" name="myForms">
+            <section id="patient_detail">
+                <div class="detail_required">
+                    <div class="info_row">
+                        <label for="first_name">First Name</label>
+                        <input type="text" name="first_name" required  pattern= "(?=.*[a-zA-Z]).{1,}">
+                        
+                    </div>
+                    <div class="info_row">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" name="last_name"  required pattern= "(?=.*[a-zA-Z]).{1,}">
+                    </div>
+                </div>
+                <div class="detail_required">
+                    <div class="info_row">
+                        <label for="email">Email Address</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="info_row">
+                        <label for="password">Password</label>
+                        <input type="text" name="password"  required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title ="Password must be 8-16 characters long, include at least one uppercase letter, one lowercase letter, and one number.">
+                        {{!-- onkeydown="return /^[A-Za-z0-9_@./#&+-]*$/.test(event.key)" --}}
+                    </div>
+                </div>
+                <div class="detail_required">
+                    <div class="info_row">
+                        <label for="year_of_birth">Year of Birth</label>
+                        <input type="number" min="1900" max="2022" step="1" name="year" placeholder="yyyy" required>
+
+                    </div>
+                    <div class="info_row">
+                        <label for="sex">Sex</label>
+                        <input type="text" name="patient_sex" placeholder="female/male" id="patient_sex" required pattern="[Mm]ale|[Ff]emale">
+                    </div>
+                </div>
+                <div id="err_msg">{{message}}</div>
+                <div id="create_button">
+                    <button type="submit">Create</button>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var form = document.getElementById('createFunction');
+
+    function notification() {
+        console.log("Validation is running...");
+
+        // 验证姓名
+        let namePattern = /^[a-zA-Z]+$/;
+        let fName = document.forms["myForms"]["first_name"].value;
+        let lName = document.forms["myForms"]["last_name"].value;
+        if (!namePattern.test(fName) || !namePattern.test(lName)) {
+            alert("Please enter a valid name (letters only).");
+            return false;
+        }
+
+        // 验证密码
+        let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
+        let password = document.forms["myForms"]["password"].value;
+        if (!passwordPattern.test(password)) {
+            alert("Password must be 8-16 characters, include at least one uppercase letter, one lowercase letter, and one number.");
+            return false;
+        }
+
+        // 验证性别
+        let sex = document.forms["myForms"]["patient_sex"].value.toLowerCase(); // 转换为小写
+        let validSex = ["male", "female"];
+        if (!validSex.includes(sex)) {
+            alert("Please enter 'male' or 'female' in the sex field.");
+            return false;
+        }
+
+        alert('Successfully created!');
+        return true;
+    }
+
+
+
+</script> 
