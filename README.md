@@ -2,7 +2,7 @@
 A professional portfolio highlighting my expertise in AI, NLP, full-stack development, and application building. Includes projects built with Python, React, Flask, and TensorFlow.
 
 # FullStack_Projects
-WebLife-Diabetes
+### WebLife-Diabetes
 
 WebLife-Diabetes is a full-stack web application designed to help doctors and patients monitor and manage diabetes more effectively. Doctors can track patient records, provide guidance, and patients can log their daily health data. The goal is to simplify communication and improve the overall management of diabetes care.
 
