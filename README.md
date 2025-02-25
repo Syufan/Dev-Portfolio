@@ -6,16 +6,16 @@ A professional portfolio highlighting my expertise in AI, NLP, full-stack develo
 
 WebLife-Diabetes is a full-stack web application designed to help doctors and patients monitor and manage diabetes more effectively. Doctors can track patient records, provide guidance, and patients can log their daily health data. The goal is to simplify communication and improve the overall management of diabetes care.
 
-Overview
+### Overview
 
 In many healthcare systems, diabetes management can be fragmented and cumbersome. WebLife-Diabetes provides a centralized platform where patients can log their blood sugar levels, exercise routines, insulin usage, and weight. Meanwhile, clinicians (doctors, nurses, or health coaches) can view each patient’s daily records, offer feedback, and track patient progress in real time.
 
-Key Goals:
+### Key Goals:
 	1.	Enable easy monitoring of daily diabetic metrics
 	2.	Provide a communication channel between patients and doctors
 	3.	Help doctors analyze trends and adjust treatment or lifestyle advice accordingly
 
-Key Features
+### Key Features
 	•	Patient Dashboard
 	•	Log daily metrics: blood sugar, exercise, insulin, and weight
 	•	View personalized tasks or goals set by the clinician
@@ -29,7 +29,7 @@ Key Features
 	•	Responsive UI
 	•	Accessible on different devices for both doctors and patients
 
-Tech Stack
+### Tech Stack
 	•	Front-End: HTML, CSS, Handlebars (templating)
 	•	Back-End: Node.js, Express
 	•	Database: MongoDB (Atlas) + Mongoose
@@ -39,7 +39,7 @@ Tech Stack
 	•	dotenv for environment variables
 	•	nodemon for local development
 
-Project Structure
+### Project Structure
     WebLife-Diabetes
     ├── app.js                  # Main Express application
     ├── package.json
@@ -53,13 +53,13 @@ Project Structure
     ├── passport.js             # Passport configuration
     └── README.md               # Project README
 
-Setup & Installation
+### Setup & Installation
     1.	Run npm install to install dependencies
     2.	Create a .env file with your MongoDB connection string
     3.	Run npm start to start the server
     4.	Visit http://localhost:3000 to view the application
 
-Usage
+### Usage
 	•	Local Development
 	•	After starting the server, visit http://localhost:3000.
 	•	Use a test patient account to log daily metrics.
@@ -69,7 +69,7 @@ Usage
 	•	Environment variables (like MONGO_URL) are set in Azure Configuration (not .env).
 	•	Access the live site at: https://weblife-diabetes.azurewebsites.net
 
-Account for clinician and patient:
+### Account for clinician and patient:
     clinician1: 
         account: chris@gmail.com
         password: 12345678
