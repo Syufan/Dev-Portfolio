@@ -50,13 +50,13 @@ The system leverages Java RMI (Remote Method Invocation) for real-time collabora
 		•	Normal users have standard drawing and chat capabilities but require manager approval to join
 ### How to Start
 	1.	Start the Server
-			java -jar WhiteBoardServer.jar <port number>
+ 		java -jar WhiteBoardServer.jar <port number>
  		Example:
-   			java -jar WhiteBoardServer.jar 1234
-     	2.	Start the Client
-      			java -jar WhiteBoardClient.jar <host address> <port number>
+   		java -jar WhiteBoardServer.jar 1234
+	2.	Start the Client
+      		java -jar WhiteBoardClient.jar <host address> <port number>
 		Example:
-  			java -jar WhiteBoardClient.jar localhost 1234
+  		java -jar WhiteBoardClient.jar localhost 1234
     		Replace localhost with the server’s IP or hostname if running remotely
 		You will be prompted to enter a username. If the manager is already running, you can request to join
  ### Folder Structure
