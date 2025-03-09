@@ -1,7 +1,3 @@
-# Dev-Portfolio
-A professional portfolio highlighting my expertise in AI, NLP, full-stack development, and application building. Includes projects built with Python, React, Flask, and TensorFlow.
-
-# Apps
 ### WhiteBoard
 WhiteBoard is a distributed shared whiteboard system that allows multiple users to collaboratively draw, edit, and communicate in real time over a network. The application supports two main user roles: a manager and normal users.
 
