@@ -28,6 +28,7 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 // app.js
+print("last test")
 // Configure Handlebars
 app.engine(
     'hbs',
