@@ -15,10 +15,6 @@ jobs:
     name: Run Pre-commit + Tests
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: FullStack_Projects/WebLife-Diabetes
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -37,23 +33,29 @@ jobs:
         run: |
           pip install pre-commit
           pre-commit install
+        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Run Pre-commit Hooks
         run: pre-commit run --all-files
+        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Install Node Dependencies
         run: npm install
+        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Run Node Tests
         run: npm test || echo "No JS tests found"
+        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Install Python Dependencies
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Run Python Tests
         run: |
           if [ -d tests ]; then pytest; else echo "No Python tests found"; fi
+        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Zip artifact for deployment
         run: |
@@ -85,6 +87,5 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: release.zip
 
-      # 可选: 清理 release.zip
       - name: Cleanup ZIP (Optional)
         run: rm -f release.zip
