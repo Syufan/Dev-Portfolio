@@ -1,0 +1,7 @@
+- name: Install Pre-commit
+  run: |
+    pip install pre-commit
+    pre-commit install
+
+- name: Run Pre-commit Hooks
+  run: pre-commit run --all-files
