@@ -60,7 +60,8 @@ jobs:
       - name: Zip artifact for deployment
         run: |
           cd FullStack_Projects/WebLife-Diabetes
-          zip -r ../../release.zip . -x "**/node_modules/*" "**/.git/*" "**/.env"
+          zip -r ../../release.zip . \
+            -x "**/node_modules/*" "**/.git/*" "**/.env" "**/*.class" "**/bin/*" "**/*.java"
           cd ../../
 
       - name: Upload artifact for deployment
