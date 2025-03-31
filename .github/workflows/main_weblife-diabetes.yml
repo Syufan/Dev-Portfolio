@@ -29,11 +29,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: List directory and check package.json
-        run: |
-          ls -la WebLife-Diabetes
-          cat WebLife-Diabetes/package.json
-
       - name: Install Pre-commit
         run: |
           pip install pre-commit
@@ -45,8 +40,7 @@ jobs:
         working-directory: WebLife-Diabetes
 
       - name: Install Node Dependencies
-        run: |
-          npm ci --verbose
+        run: npm ci --verbose
         working-directory: WebLife-Diabetes
 
       - name: Run Node Tests
@@ -86,6 +80,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: release
+
+      - name: Check the content of release.zip
+        run: unzip -l release.zip
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
