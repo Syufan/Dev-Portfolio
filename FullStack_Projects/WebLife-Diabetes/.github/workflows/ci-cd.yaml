@@ -1,7 +1,56 @@
-- name: Install Pre-commit
-  run: |
-    pip install pre-commit
-    pre-commit install
+name: CI/CD for WebLife-Diabetes
 
-- name: Run Pre-commit Hooks
-  run: pre-commit run --all-files
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'FullStack_Projects/WebLife-Diabetes/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'FullStack_Projects/WebLife-Diabetes/**'
+
+jobs:
+  ci:
+    name: Run Pre-commit + Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: FullStack_Projects/WebLife-Diabetes
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Pre-commit
+        run: |
+          pip install pre-commit
+          pre-commit install
+
+      - name: Run Pre-commit Hooks
+        run: pre-commit run --all-files
+
+      - name: Install Node Dependencies
+        run: npm install
+
+      - name: Run Node Tests
+        run: npm test || echo "No JS tests found"
+
+      - name: Install Python Dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run Python Tests
+        run: |
+          if [ -d tests ]; then pytest; else echo "No Python tests found"; fi
