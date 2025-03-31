@@ -1,7 +1,7 @@
 {
   "name": "glucope",
   "version": "1.0.0",
-  "description": "",
+  "description": "For both clinician and patient password:         The length of password between 8 and 16.         The characters for password include: regular expression-->  /^[A-Za-z0-9_@./#&+-]*$/   All account data register input would have reasonable data input validation functions to prevent undesirable data entry. For clinician:         Clinicians can update their accounts password.         Clinicians can update the workplace.         Clinicians can set up an account for patient (the password is without bcrypt for patient to know their password)",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,8 +22,14 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.23.0",
     "dotenv": "^16.4.7",
+    "eslint": "^9.23.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0",
     "nodemon": "^3.1.4",
     "prettier": "^2.6.2"
-  }
+  },
+  "keywords": [],
+  "type": "module"
 }
