@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'FullStack_Projects/WebLife-Diabetes/**'
+      - 'WebLife-Diabetes/**'
   pull_request:
     branches: [main]
     paths:
-      - 'FullStack_Projects/WebLife-Diabetes/**'
+      - 'WebLife-Diabetes/**'
 
 jobs:
   ci:
@@ -16,53 +16,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1) 拉取代码
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # 2) 安装 Python（给 pre-commit 用）
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.10
 
+      # 3) 安装 Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 4) 安装 Pre-commit 并运行 (在 WebLife-Diabetes 目录)
       - name: Install Pre-commit
         run: |
           pip install pre-commit
           pre-commit install
-        working-directory: FullStack_Projects/WebLife-Diabetes
+        working-directory: WebLife-Diabetes
 
       - name: Run Pre-commit Hooks
         run: pre-commit run --all-files
-        working-directory: FullStack_Projects/WebLife-Diabetes
+        working-directory: WebLife-Diabetes
 
+      # 5) 安装 Node 依赖 & 测试 (在 WebLife-Diabetes 目录)
       - name: Install Node Dependencies
         run: npm install
-        working-directory: FullStack_Projects/WebLife-Diabetes
+        working-directory: WebLife-Diabetes
 
       - name: Run Node Tests
         run: npm test || echo "No JS tests found"
-        working-directory: FullStack_Projects/WebLife-Diabetes
+        working-directory: WebLife-Diabetes
 
+      # 6) 可选 Python 测试 (如果你有 requirements.txt / tests)
       - name: Install Python Dependencies
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        working-directory: FullStack_Projects/WebLife-Diabetes
 
       - name: Run Python Tests
         run: |
           if [ -d tests ]; then pytest; else echo "No Python tests found"; fi
-        working-directory: FullStack_Projects/WebLife-Diabetes
 
+      # 7) 打包部署文件 (在 WebLife-Diabetes 目录执行 zip)
       - name: Zip artifact for deployment
         run: |
-          cd FullStack_Projects/WebLife-Diabetes
-          zip -r ../../release.zip . \
+          cd WebLife-Diabetes
+          zip -r ../release.zip . \
             -x "**/node_modules/*" "**/.git/*" "**/.env" "**/*.class" "**/bin/*" "**/*.java"
-          cd ../../
+          cd ..
+        # 解释：这会在 Dev-Portfolio 下生成 release.zip
+        # 里面只包含 WebLife-Diabetes/ 下的代码
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v3
@@ -81,10 +88,11 @@ jobs:
         with:
           name: release
 
+      # 使用 publish-profile 方式部署到 Azure
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: WEBLIFE-DIABETES
+          app-name: 'WEBLIFE-DIABETES'  # 替换为你的 Azure Web App 名
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: release.zip
 
