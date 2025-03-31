@@ -76,26 +76,25 @@ jobs:
           name: release
           path: release.zip
 
-  cd:                            # Job 2：CD 阶段，部署 release.zip 到 Azure
-    name: Deploy to Azure Web App
-    needs: ci                    # 依赖前一个 job（ci）完成之后才执行
-    runs-on: ubuntu-latest
+cd:                            # Job 2：CD 阶段，部署 release.zip 到 Azure
+  name: Deploy to Azure Web App
+  runs-on: ubuntu-latest
 
-    steps:
-      - name: Download artifact from CI  # 下载 release.zip（由上一步 upload-artifact 上传的）
-        uses: actions/download-artifact@v3
-        with:
-          name: release
+  steps:
+    - name: Download artifact from CI  # 下载 release.zip（由上一步 upload-artifact 上传的）
+      uses: actions/download-artifact@v3
+      with:
+        name: release
 
-      - name: Check the content of release.zip
-        run: unzip -l release.zip
+    - name: Check the content of release.zip
+      run: unzip -l release.zip
 
-      - name: Deploy to Azure Web App    # 部署到 Azure Web App，基于发布文件
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: WEBLIFE-DIABETES     # Azure App Service 的名字（需与你 Azure Portal 一致）
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 你的发布凭证
-          package: release.zip           # 部署包路径
+    - name: Deploy to Azure Web App    # 部署到 Azure Web App，基于发布文件
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: WEBLIFE-DIABETES     # Azure App Service 的名字（需与你 Azure Portal 一致）
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 你的发布凭证
+        package: release.zip           # 部署包路径
 
-      - name: Cleanup ZIP (Optional)     # 清理部署 zip 文件，保持环境干净
-        run: rm -f release.zip
+    - name: Cleanup ZIP (Optional)     # 清理部署 zip 文件，保持环境干净
+      run: rm -f release.zip
