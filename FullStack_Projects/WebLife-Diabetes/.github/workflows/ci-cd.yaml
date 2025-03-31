@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: release
-          path: FullStack_Projects/WebLife-Diabetes/release.zip
+          path: release.zip
 
   cd:
     name: Deploy to Azure Web App
@@ -78,15 +78,16 @@ jobs:
       - name: Unzip artifact
         run: unzip release.zip
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#      - name: Login to Azure
+#        uses: azure/login@v2
+#        with:
+#          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: WEBLIFE-DIABETES
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
