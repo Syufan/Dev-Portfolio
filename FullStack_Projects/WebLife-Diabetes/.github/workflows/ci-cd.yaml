@@ -1,82 +1,88 @@
-name: CI/CD for WebLife-Diabetes
+name: CI/CD for WebLife-Diabetes  # Workflow 名称，会显示在 GitHub Actions 页面标题上
 
 on:
-  push:
+  push:                           # 当有 push 到 main 分支，并且路径在 WebLife-Diabetes/ 下时触发
     branches: [main]
     paths:
       - 'WebLife-Diabetes/**'
-  pull_request:
+
+  pull_request:                   # 当 PR 指向 main 分支，且路径在 WebLife-Diabetes/ 下时触发
     branches: [main]
     paths:
       - 'WebLife-Diabetes/**'
 
 jobs:
-  ci:
+  ci:                             # Job 1：CI 阶段，主要执行测试与代码检查
     name: Run Pre-commit + Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest        # 使用 GitHub 托管的 Ubuntu 虚拟机
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Code       # 步骤 1：拉取代码
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Set up Python       # 步骤 2：安装 Python，用于运行 pre-commit 和 Python 测试
         uses: actions/setup-python@v4
         with:
           python-version: 3.10
 
-      - name: Set up Node.js
+      - name: Set up Node.js      # 步骤 3：安装 Node.js，用于前端依赖和测试
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install Pre-commit
+      # === pre-commit ===
+      - name: Install Pre-commit  # 安装 pre-commit 并初始化 hook
         run: |
           pip install pre-commit
           pre-commit install
         working-directory: WebLife-Diabetes
 
-      - name: Run Pre-commit Hooks
+      - name: Run Pre-commit Hooks # 运行所有 hook（例如代码格式化、敏感信息检查等）
         run: pre-commit run --all-files
         working-directory: WebLife-Diabetes
 
-      - name: Install Node Dependencies
-        run: npm ci --verbose
+      # === Node.js 测试 ===
+      - name: Install Node Dependencies  # 安装 JS 依赖
+        run: |
+          npm ci --verbose
         working-directory: WebLife-Diabetes
 
-      - name: Run Node Tests
+      - name: Run Node Tests       # 运行 JS 测试，测试失败不报错（|| echo 兼容空测试）
         run: npm test || echo "No JS tests found"
         working-directory: WebLife-Diabetes
 
-      - name: Install Python Dependencies
+      # === Python 测试（可选）===
+      - name: Install Python Dependencies  # 如果有 Python 依赖文件，则安装
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         working-directory: WebLife-Diabetes
 
-      - name: Run Python Tests
+      - name: Run Python Tests    # 如果有 tests 目录，则运行 pytest 测试
         run: |
           if [ -d tests ]; then pytest; else echo "No Python tests found"; fi
         working-directory: WebLife-Diabetes
 
-      - name: Zip artifact for deployment
+      # === 打包部署文件 ===
+      - name: Zip artifact for deployment  # 进入 WebLife-Diabetes 打包项目为 release.zip（排除垃圾）
         run: |
           cd WebLife-Diabetes
           zip -r ../release.zip . \
             -x "**/node_modules/*" "**/.git/*" "**/.env" "**/*.class" "**/bin/*" "**/*.java"
           cd ..
 
-      - name: Upload artifact for deployment
+      - name: Upload artifact for deployment  # 上传 release.zip，供 CD 阶段使用
         uses: actions/upload-artifact@v3
         with:
           name: release
           path: release.zip
 
-  cd:
+  cd:                            # Job 2：CD 阶段，部署 release.zip 到 Azure
     name: Deploy to Azure Web App
-    needs: ci
+    needs: ci                    # 依赖前一个 job（ci）完成之后才执行
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifact from CI
+      - name: Download artifact from CI  # 下载 release.zip（由上一步 upload-artifact 上传的）
         uses: actions/download-artifact@v3
         with:
           name: release
@@ -84,12 +90,12 @@ jobs:
       - name: Check the content of release.zip
         run: unzip -l release.zip
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App    # 部署到 Azure Web App，基于发布文件
         uses: azure/webapps-deploy@v2
         with:
-          app-name: WEBLIFE-DIABETES
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: release.zip
+          app-name: WEBLIFE-DIABETES     # Azure App Service 的名字（需与你 Azure Portal 一致）
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 你的发布凭证
+          package: release.zip           # 部署包路径
 
-      - name: Cleanup ZIP (Optional)
+      - name: Cleanup ZIP (Optional)     # 清理部署 zip 文件，保持环境干净
         run: rm -f release.zip
