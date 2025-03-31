@@ -1,0 +1,110 @@
+---
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+repos:
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: (?x)(
+          src/ui/.*|
+          .*/tests/files/.*|
+          )
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+        args:
+          - --maxkb=1000
+      - id: check-merge-conflict
+      - id: detect-aws-credentials
+        args:
+            - --allow-missing-credentials
+      - id: detect-private-key
+      - id: debug-statements
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+      - id: check-ast
+      - id: check-builtin-literals
+
+  - repo: https://github.com/detailyang/pre-commit-shell
+    rev: 1.0.5
+    hooks:
+      - id: shell-lint
+        exclude: (?x)(
+          .devcontainer/.*|
+          )
+        args: ["-e", "SC2103"]
+
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v3.1.0
+    hooks:
+      - id: add-trailing-comma
+        exclude: (?x)(
+          .*/tests/files/.*|
+          )
+        args:
+          - --py36-plus
+
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-use-type-annotations
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: rst-backticks
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+
+  # Ruff does linting and fixing, it is important that this runs before 'black' because black should have the final
+  # say on formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.9.3
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix, --show-fixes]
+
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+      - id: black-jupyter
+
+  - repo: local
+    hooks:
+      - id: python-no-assertionerror
+        name: check for AssertionError
+        description: "Check for usage of `AssertionError`"
+        entry: (?x)(
+          raise\sAssertionError|
+          except.*AssertionError
+          )
+        language: pygrep
+        types: [python]
+
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+        stages: [commit-msg]
+
+      - id: gitlint
+        entry: gitlint --commits upstream/master..
+        exclude: .*
+        always_run: true
+        stages: [manual]
+
+  - repo: local
+    hooks:
+      - id: pyright
+        name: pyright
+        entry: pyright -p pyrightconfig_ci.json
+        language: node
+        types: [python]
+        additional_dependencies: ["pyright@1.1.392"]
