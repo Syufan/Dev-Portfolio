@@ -62,36 +62,36 @@ jobs:
         working-directory: WebLife-Diabetes
 
       # === 打包部署文件 ===
-      - name: Zip artifact for deployment  # 进入 WebLife-Diabetes 打包项目为 release.zip（排除垃圾）
-        run: |
-          cd WebLife-Diabetes
-          zip -r ../release.zip . \
-            -x "**/node_modules/*" "**/.git/*" "**/.env" "**/*.class" "**/bin/*" "**/*.java" "**/release.zip"
-          cd ..
+#      - name: Zip artifact for deployment  # 进入 WebLife-Diabetes 打包项目为 release.zip（排除垃圾）
+#        run: |
+#          cd WebLife-Diabetes
+#          zip -r ../release.zip . \
+#            -x "**/node_modules/*" "**/.git/*" "**/.env" "**/*.class" "**/bin/*" "**/*.java" "**/release.zip"
+#          cd ..
 
-      - name: Upload artifact for deployment  # 上传 release.zip，供 CD 阶段使用
-        uses: actions/upload-artifact@v3
-        with:
-          name: release
-          path: release.zip
+#      - name: Upload artifact for deployment  # 上传 release.zip，供 CD 阶段使用
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: release
+#          path: release.zip
 
-  cd:                            # Job 2：CD 阶段，部署 release.zip 到 Azure
-    name: Deploy to Azure Web App
-    needs: ci                    # 依赖前一个 job（ci）完成之后才执行
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download artifact from CI  # 下载 release.zip（由上一步 upload-artifact 上传的）
-        uses: actions/download-artifact@v3
-        with:
-          name: release
-
-      - name: Deploy to Azure Web App    # 部署到 Azure Web App，基于发布文件
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: WEBLIFE-DIABETES     # Azure App Service 的名字（需与你 Azure Portal 一致）
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 你的发布凭证
-          package: release.zip           # 部署包路径
-
-      - name: Cleanup ZIP (Optional)     # 清理部署 zip 文件，保持环境干净
-        run: rm -f release.zip
+#  cd:                            # Job 2：CD 阶段，部署 release.zip 到 Azure
+#    name: Deploy to Azure Web App
+#    needs: ci                    # 依赖前一个 job（ci）完成之后才执行
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Download artifact from CI  # 下载 release.zip（由上一步 upload-artifact 上传的）
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: release
+#
+#      - name: Deploy to Azure Web App    # 部署到 Azure Web App，基于发布文件
+#        uses: azure/webapps-deploy@v2
+#        with:
+#          app-name: WEBLIFE-DIABETES     # Azure App Service 的名字（需与你 Azure Portal 一致）
+#          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 你的发布凭证
+#          package: release.zip           # 部署包路径
+#
+#      - name: Cleanup ZIP (Optional)     # 清理部署 zip 文件，保持环境干净
+#        run: rm -f release.zip
