@@ -27,9 +27,8 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
-print("hello world")
-
-
+// app.js
+console.log("Hello World")
 // Configure Handlebars
 app.engine(
     'hbs',
