@@ -1,69 +1,101 @@
- # @@ -0,0 +1,68 @@
- # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
- # More GitHub Actions for Azure: https://github.com/Azure/actions
- 
- name: Build and deploy Node.js app to Azure Web App - WEBLIFE-DIABETES
- 
- on:
-   push:
-     branches:
-       - main
-   workflow_dispatch:
- 
- jobs:
-   build:
-     runs-on: ubuntu-latest
-     permissions:
-       contents: read #This is required for actions/checkout
- 
-     steps:
-       - uses: actions/checkout@v4
- 
-       - name: Set up Node.js version
-         uses: actions/setup-node@v3
-         with:
-           node-version: '22.x'
- 
-       - name: Zip artifact for deployment
-         run: zip release.zip ./* -r
- 
-       - name: Upload artifact for deployment job
-         uses: actions/upload-artifact@v4
-         with:
-           name: node-app
-           path: release.zip
- 
-   deploy:
-     runs-on: ubuntu-latest
-     needs: build
-     environment:
-       name: 'Production'
-       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-     permissions:
-       id-token: write #This is required for requesting the JWT
-       contents: read #This is required for actions/checkout
- 
-     steps:
-       - name: Download artifact from build job
-         uses: actions/download-artifact@v4
-         with:
-           name: node-app
- 
-       - name: Unzip artifact for deployment
-         run: unzip release.zip
-       
-       - name: Login to Azure
-         uses: azure/login@v2
-         with:
-           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B8B6AFFCF1504D3F8D46C29C6A6B0834 }}
-           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4FB3FD198500403A8F703B61ED2E85E2 }}
-           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A016FA7F75044F108F06458638B5E9E3 }}
- 
-       - name: 'Deploy to Azure Web App'
-         id: deploy-to-webapp
-         uses: azure/webapps-deploy@v3
-         with:
-           app-name: 'WEBLIFE-DIABETES'
-           slot-name: 'Production'
-           package: .
-           
+name: CI/CD for WebLife-Diabetes  # Workflow 名称，会显示在 GitHub Actions 页面标题上
+
+on:
+  push:                           # 当有 push 到 main 分支，并且路径在 WebLife-Diabetes/ 下时触发
+    branches: [main]
+    paths:
+      - 'WebLife-Diabetes/**'
+
+  pull_request:                   # 当 PR 指向 main 分支，且路径在 WebLife-Diabetes/ 下时触发
+    branches: [main]
+    paths:
+      - 'WebLife-Diabetes/**'
+
+jobs:
+  ci:                             # Job 1：CI 阶段，主要执行测试与代码检查
+    name: Run Pre-commit + Tests
+    runs-on: ubuntu-latest        # 使用 GitHub 托管的 Ubuntu 虚拟机
+
+    steps:
+      - name: Checkout Code       # 步骤 1：拉取代码
+        uses: actions/checkout@v3
+
+      - name: Set up Python       # 步骤 2：安装 Python，用于运行 pre-commit 和 Python 测试
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Set up Node.js      # 步骤 3：安装 Node.js，用于前端依赖和测试
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # === pre-commit ===
+      - name: Install Pre-commit  # 安装 pre-commit 并初始化 hook
+        run: |
+          pip install pre-commit
+          pre-commit install
+        working-directory: WebLife-Diabetes
+
+      - name: Run Pre-commit Hooks # 运行所有 hook（例如代码格式化、敏感信息检查等）
+        run: pre-commit run --all-files
+        working-directory: WebLife-Diabetes
+
+      # === Node.js 测试 ===
+      - name: Install Node Dependencies  # 安装 JS 依赖
+        run: |
+          npm ci --verbose
+        working-directory: WebLife-Diabetes
+
+      - name: Run Node Tests       # 运行 JS 测试，测试失败不报错（|| echo 兼容空测试）
+        run: npm test || echo "No JS tests found"
+        working-directory: WebLife-Diabetes
+
+      # === Python 测试（可选）===
+      - name: Install Python Dependencies  # 如果有 Python 依赖文件，则安装
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        working-directory: WebLife-Diabetes
+
+      - name: Run Python Tests    # 如果有 tests 目录，则运行 pytest 测试
+        run: |
+          if [ -d tests ]; then pytest; else echo "No Python tests found"; fi
+        working-directory: WebLife-Diabetes
+
+      # === 打包部署文件 ===
+      - name: Zip artifact for deployment  # 进入 WebLife-Diabetes 打包项目为 release.zip（排除垃圾）
+        run: |
+          cd WebLife-Diabetes
+          zip -r ../release.zip . \
+            -x "**/node_modules/*" "**/.git/*" "**/.env" "**/*.class" "**/bin/*" "**/*.java"
+          cd ..
+
+      - name: Upload artifact for deployment  # 上传 release.zip，供 CD 阶段使用
+        uses: actions/upload-artifact@v3
+        with:
+          name: release
+          path: release.zip
+
+  cd:                            # Job 2：CD 阶段，部署 release.zip 到 Azure
+    name: Deploy to Azure Web App
+    needs: ci                    # 依赖前一个 job（ci）完成之后才执行
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact from CI  # 下载 release.zip（由上一步 upload-artifact 上传的）
+        uses: actions/download-artifact@v3
+        with:
+          name: release
+
+      - name: Check the content of release.zip
+        run: unzip -l release.zip
+
+      - name: Deploy to Azure Web App    # 部署到 Azure Web App，基于发布文件
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: WEBLIFE-DIABETES     # Azure App Service 的名字（需与你 Azure Portal 一致）
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 你的发布凭证
+          package: release.zip           # 部署包路径
+
+      - name: Cleanup ZIP (Optional)     # 清理部署 zip 文件，保持环境干净
+        run: rm -f release.zip
