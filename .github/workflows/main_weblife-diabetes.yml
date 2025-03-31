@@ -33,7 +33,7 @@ jobs:
           zip -r release.zip WebLife-Diabetes -x "**/node_modules/*" "**/.git/*" "**/*.class" "**/bin/*"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release
           path: release.zip
@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release
 
