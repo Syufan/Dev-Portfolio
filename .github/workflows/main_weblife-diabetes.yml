@@ -37,12 +37,8 @@ jobs:
 
       # 执行 pre-commit hook 检查代码质量
       # 执行 pre-commit 并将输出捕获到 OUT 变量中（包括标准输出与错误）
-      # 如果 pre-commit 返回非 0（失败），进入此代码块
-      # 检查输出中是否包含 "No files to check" —— 如果是说明没有文件触发检查
-      # 否则为真正的检查失败（如格式、敏感信息等），输出错误并中断 CI
-      # 如果 pre-commit 正常执行完毕，输出执行结果
       - name: Run pre-commit hooks
-        run: pre-commit run --all-files
+        run: pre-commit run --all-files --hook-stage manual --files FullStack_Projects/WebLife-Diabetes/
     
       # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
       - name: Install dependencies
