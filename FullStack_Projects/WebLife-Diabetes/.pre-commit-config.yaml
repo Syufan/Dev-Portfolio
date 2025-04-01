@@ -1,122 +1,50 @@
 ---
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-
 repos:
-  # ========== 元数据检查 ==========
+  # ========== 元信息检查 ==========
   - repo: meta
     hooks:
-      - id: check-useless-excludes # 检查是否配置了无效的 exclude 规则
+      - id: check-useless-excludes
 
   # ========== 基础代码质量检查 ==========
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0                        # 指定使用的版本
+    rev: v5.0.0
     hooks:
-      - id: trailing-whitespace        # 移除每行末尾多余的空格,排除以下路径不做处理,UI 源码目录,测试样本文件
-        exclude: (?x)(           
-          src/ui/.*|
-          .*/tests/files/.*|
-          )
-      - id: end-of-file-fixer          # 确保所有文件以换行符结尾
-      - id: check-added-large-files    # 检查是否加入了超大文件
-        args:
-          - --maxkb=1000               # 文件超过 1MB 会被拦截
-      - id: check-merge-conflict       # 检查是否意外提交了冲突标记（如 `<<<<<<< HEAD`）
-      - id: detect-aws-credentials     # 检测是否误提交 AWS 密钥
-        args:
-            - --allow-missing-credentials # 如果没配置 AWS 凭据，也不报错
-      - id: detect-private-key         # 检查是否误提交私钥（如 id_rsa）
-      - id: debug-statements           # 检查是否包含调试语句，如 `print()` 或 `pdb.set_trace()`
-      - id: check-toml                 # 检查 `.toml` 配置格式是否规范
-      - id: check-xml                  # 检查 XML 格式是否有效
-      - id: check-yaml                 # 检查 YAML 格式是否有效
-      - id: check-ast                  # 检查 Python 是否能正常被解析为 AST
-      - id: check-builtin-literals     # 建议用字面量替代构造函数（如用 `[]` 替代 `list()`）
+      - id: trailing-whitespace        # 删除行末多余空格
+      - id: end-of-file-fixer          # 确保文件以换行结尾
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]         # 限制文件最大体积（单位：KB）
+      - id: check-merge-conflict       # 检查是否提交了冲突标记
+      - id: detect-aws-credentials     # 检查 AWS 凭据
+        args: ["--allow-missing-credentials"]
+      - id: detect-private-key         # 检查私钥泄露
+      - id: debug-statements           # 检查调试语句（如 console.log）
 
-  # ========== Shell 脚本静态检查 ==========
-  - repo: https://github.com/detailyang/pre-commit-shell
-    rev: 1.0.5
-    hooks:
-      - id: shell-lint                 # 不检查 devcontainer 配置文件夹
-        exclude: (?x)(
-          .devcontainer/.*|
-          )
-        args: ["-e", "SC2103"]         # 忽略 SC2103（可能是特定场景不适用的规则）
+      - id: check-yaml                 # YAML 语法检查
+      - id: check-xml                  # XML 检查（可保留或移除）
 
-  - repo: https://github.com/asottile/add-trailing-comma
-    rev: v3.1.0
-    hooks:
-      - id: add-trailing-comma         # 排除测试用文件
-        exclude: (?x)(
-          .*/tests/files/.*|
-          )
-        args:
-          - --py36-plus                # 针对 Python 3.6+ 的语法优化
-
-
-  # ========== Python 常规语法/格式 检查 ==========
-  - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.10.0
-    hooks:
-      - id: python-check-blanket-noqa    # 避免大范围 `noqa` 屏蔽所有检查
-      - id: python-use-type-annotations  # 要求添加类型注解
-      - id: python-no-eval               # 禁止使用 `eval()` 语句
-      - id: python-no-log-warn           # 禁止使用 `.warn()`，建议用 `.warning()`
-      - id: rst-backticks                # reStructuredText 的语法检查
-      - id: rst-directive-colons
-      - id: rst-inline-touching-normal
-
-  # Ruff does linting and fixing, it is important that this runs before 'black' because black should have the final
-  # say on formatting
-  # ========== Ruff Linter（Python 的超级快代码检查+自动修复工具） ==========
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.2
-    hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix, --show-fixes]
-        # --fix 自动修复
-        # --exit-non-zero-on-fix：如果 Ruff 做了修改，则返回非 0 状态码（终止 CI）
-        # --show-fixes 显示被修复的内容
-
-  # ========== black 格式化（Python 格式终极标准） ==========
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
-    hooks:
-      - id: black           # 格式化 .py 文件
-      - id: black-jupyter   # 格式化 Jupyter Notebook（.ipynb）
-
-  # ========== 自定义钩子（AssertionError 检查） ==========
-  - repo: local
-    hooks:
-      - id: python-no-assertionerror
-        name: check for AssertionError
-        description: "Check for usage of `AssertionError`"  # 使用正则匹配以下内容,检查是否 `raise AssertionError`,检查是否处理 AssertionError 异常
-        entry: (?x)(
-          raise\sAssertionError|
-          except.*AssertionError
-          )
-        language: pygrep
-        types: [python]
-
-  # ========== git commit message 检查（提交规范） ==========
+  # ========== Git 提交信息规范检查 ==========
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:
       - id: gitlint
-        stages: [commit-msg]  # 在 `git commit` 时执行，校验提交信息
+        stages: [commit-msg]
 
-      - id: gitlint
-        entry: gitlint --commits upstream/master..  # 检查自上次 master 起的所有 commit
-        exclude: .*                                 # 默认不执行，手动触发（通过 pre-commit run 手动调用）
-        always_run: true
-        stages: [manual]
-
-  # ========== 自定义钩子（Pyright 类型检查） ==========
+  # ========== 可选：本地 ESLint 检查 ==========
   - repo: local
     hooks:
-      - id: pyright
-        name: pyright
-        entry: pyright -p pyrightconfig_ci.json   # 执行类型检查（指定 pyright 配置文件）
-        language: node
-        types: [python]
-        additional_dependencies: ["pyright@1.1.392"]
+      - id: eslint
+        name: Run ESLint
+        entry: npx eslint .
+        language: system
+        types: [javascript]
+
+  # ========== 可选：Prettier 格式化检查 ==========
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Run Prettier
+        entry: npx prettier --check .
+        language: system
+        types: [javascript, json, yaml, html, css, markdown]
