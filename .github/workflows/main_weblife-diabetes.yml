@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: WebLife-Diabetes
 
     steps:
       - name: Checkout code
@@ -23,13 +20,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: WebLife-Diabetes
 
       - name: Run JS Tests
         run: npm test || echo "No JS tests found"
+        working-directory: WebLife-Diabetes
 
       - name: Zip for deployment
         run: |
-          cd ..
           zip -r release.zip WebLife-Diabetes -x "**/node_modules/*" "**/.git/*" "**/*.class" "**/bin/*"
 
       - name: Upload artifact
