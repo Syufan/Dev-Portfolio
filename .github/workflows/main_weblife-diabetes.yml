@@ -38,7 +38,7 @@ jobs:
       # 执行 pre-commit hook 检查代码质量
       # 执行 pre-commit 并将输出捕获到 OUT 变量中（包括标准输出与错误）
       - name: Run pre-commit hooks
-        run: pre-commit run --all-files --hook-stage manual --files FullStack_Projects/WebLife-Diabetes/
+        run: pre-commit run --files FullStack_Projects/WebLife-Diabetes/
     
       # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
       - name: Install dependencies
