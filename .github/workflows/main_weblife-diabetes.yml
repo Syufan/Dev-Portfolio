@@ -42,14 +42,7 @@ jobs:
       # 否则为真正的检查失败（如格式、敏感信息等），输出错误并中断 CI
       # 如果 pre-commit 正常执行完毕，输出执行结果
       - name: Run pre-commit hooks
-        run: |
-          OUT=$(pre-commit run --all-files 2>&1) || {
-            echo "$OUT" | grep -q "No files to check" && \
-              echo "No files to check, skip pre-commit and continue CI" && exit 0
-            echo "$OUT"
-            exit 1
-          }
-          echo "$OUT"
+        run: pre-commit run --all-files
     
       # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
       - name: Install dependencies
