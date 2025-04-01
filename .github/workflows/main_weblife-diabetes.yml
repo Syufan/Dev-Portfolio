@@ -6,8 +6,7 @@ name: Build and Deploy WebLife-Diabetes to Azure
 on:
   push:
     branches: [main]
-    paths:
-      - 'FullStack_Projects/WebLife-Diabetes/**'  # 仅当此目录下有改动时才触发
+
   workflow_dispatch:  # 手动触发按钮（在 GitHub Actions 页面上点击运行）
 
 # 定义两个 Job：build 和 deploy
