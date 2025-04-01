@@ -32,6 +32,13 @@ jobs:
         with:
           node-version: 18
 
+      # 安装 pre-commit 以进行代码规范检查
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
+
       # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
       - name: Install dependencies
         run: npm ci
