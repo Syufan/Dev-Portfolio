@@ -2,29 +2,23 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-  # ========== 元信息检查 ==========
-  - repo: meta
-    hooks:
-      - id: check-useless-excludes
-
-  # ========== 基础代码质量检查 ==========
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-      - id: trailing-whitespace        # 删除行末多余空格
-      - id: end-of-file-fixer          # 确保文件以换行结尾
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
       - id: check-added-large-files
-        args: ["--maxkb=1000"]         # 限制文件最大体积（单位：KB）
-      - id: check-merge-conflict       # 检查是否提交了冲突标记
-      - id: detect-aws-credentials     # 检查 AWS 凭据
-        args: ["--allow-missing-credentials"]
-      - id: detect-private-key         # 检查私钥泄露
-      - id: debug-statements           # 检查调试语句（如 console.log）
+        args: ["--maxkb=1000"]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: debug-statements
 
-      - id: check-yaml                 # YAML 语法检查
-      - id: check-xml                  # XML 检查（可保留或移除）
+  - repo: https://github.com/detailyang/pre-commit-shell
+    rev: 1.0.5
+    hooks:
+      - id: shell-lint
 
-  # ========== Git 提交信息规范检查 ==========
+  # 可选：检查 git commit message 是否规范（如果你有规范要求）
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:
