@@ -8,7 +8,6 @@ repos:
         args: ["--maxkb=1000"]
       - id: check-merge-conflict
       - id: detect-private-key
-      - id: debug-statements
 
   # 可选：检查 git commit message 是否规范（如果你有规范要求）
   - repo: https://github.com/jorisroovers/gitlint
