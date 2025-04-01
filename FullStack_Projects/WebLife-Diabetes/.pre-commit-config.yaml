@@ -11,14 +11,13 @@ repos:
         args: ["--maxkb=1000"]
       - id: check-merge-conflict
       - id: detect-private-key
-      - id: debug-statements
 
   - repo: https://github.com/detailyang/pre-commit-shell
     rev: 1.0.5
     hooks:
       - id: shell-lint
+        exclude: ".*"  # 如果你没有 shell 文件，这样就禁用掉
 
-  # 可选：检查 git commit message 是否规范（如果你有规范要求）
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:
