@@ -1,64 +1,58 @@
 ---
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+
 repos:
   # ========== 元数据检查 ==========
   - repo: meta
     hooks:
-      - id: check-useless-excludes  # 检查是否配置了无效的 exclude 规则
+      - id: check-useless-excludes # 检查是否配置了无效的 exclude 规则
 
   # ========== 基础代码质量检查 ==========
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0  # 指定使用的版本
+    rev: v5.0.0                        # 指定使用的版本
     hooks:
-      - id: trailing-whitespace     # 移除每行末尾多余的空格
-        exclude: (?x)(              # 排除以下路径不做处理
-          src/ui/.*|               # UI 源码目录
-          .*/tests/files/.*|       # 测试样本文件
+      - id: trailing-whitespace        # 移除每行末尾多余的空格,排除以下路径不做处理,UI 源码目录,测试样本文件
+        exclude: (?x)(           
+          src/ui/.*|
+          .*/tests/files/.*|
           )
-
-      - id: end-of-file-fixer       # 确保所有文件以换行符结尾
-
-      - id: check-added-large-files  # 检查是否加入了超大文件
+      - id: end-of-file-fixer          # 确保所有文件以换行符结尾
+      - id: check-added-large-files    # 检查是否加入了超大文件
         args:
-          - --maxkb=1000            # 文件超过 1MB 会被拦截
-
-      - id: check-merge-conflict    # 检查是否意外提交了冲突标记（如 `<<<<<<< HEAD`）
-
-      - id: detect-aws-credentials  # 检测是否误提交 AWS 密钥
+          - --maxkb=1000               # 文件超过 1MB 会被拦截
+      - id: check-merge-conflict       # 检查是否意外提交了冲突标记（如 `<<<<<<< HEAD`）
+      - id: detect-aws-credentials     # 检测是否误提交 AWS 密钥
         args:
-          - --allow-missing-credentials  # 如果没配置 AWS 凭据，也不报错
-
-      - id: detect-private-key      # 检查是否误提交私钥（如 id_rsa）
-
-      - id: debug-statements        # 检查是否包含调试语句，如 `print()` 或 `pdb.set_trace()`
-
-      - id: check-toml              # 检查 `.toml` 配置格式是否规范
-      - id: check-xml               # 检查 XML 格式是否有效
-      - id: check-yaml              # 检查 YAML 格式是否有效
-      - id: check-ast               # 检查 Python 是否能正常被解析为 AST
-      - id: check-builtin-literals  # 建议用字面量替代构造函数（如用 `[]` 替代 `list()`）
+            - --allow-missing-credentials # 如果没配置 AWS 凭据，也不报错
+      - id: detect-private-key         # 检查是否误提交私钥（如 id_rsa）
+      - id: debug-statements           # 检查是否包含调试语句，如 `print()` 或 `pdb.set_trace()`
+      - id: check-toml                 # 检查 `.toml` 配置格式是否规范
+      - id: check-xml                  # 检查 XML 格式是否有效
+      - id: check-yaml                 # 检查 YAML 格式是否有效
+      - id: check-ast                  # 检查 Python 是否能正常被解析为 AST
+      - id: check-builtin-literals     # 建议用字面量替代构造函数（如用 `[]` 替代 `list()`）
 
   # ========== Shell 脚本静态检查 ==========
   - repo: https://github.com/detailyang/pre-commit-shell
     rev: 1.0.5
     hooks:
-      - id: shell-lint
+      - id: shell-lint                 # 不检查 devcontainer 配置文件夹
         exclude: (?x)(
-          .devcontainer/.*|         # 不检查 devcontainer 配置文件夹
+          .devcontainer/.*|
           )
-        args: ["-e", "SC2103"]      # 忽略 SC2103（可能是特定场景不适用的规则）
+        args: ["-e", "SC2103"]         # 忽略 SC2103（可能是特定场景不适用的规则）
 
-  # ========== 自动添加尾逗号（Python 相关） ==========
   - repo: https://github.com/asottile/add-trailing-comma
     rev: v3.1.0
     hooks:
-      - id: add-trailing-comma
+      - id: add-trailing-comma         # 排除测试用文件
         exclude: (?x)(
-          .*/tests/files/.*|       # 排除测试用文件
+          .*/tests/files/.*|
           )
         args:
-          - --py36-plus            # 针对 Python 3.6+ 的语法优化
+          - --py36-plus                # 针对 Python 3.6+ 的语法优化
+
 
   # ========== Python 常规语法/格式 检查 ==========
   - repo: https://github.com/pre-commit/pygrep-hooks
@@ -72,6 +66,8 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
 
+  # Ruff does linting and fixing, it is important that this runs before 'black' because black should have the final
+  # say on formatting
   # ========== Ruff Linter（Python 的超级快代码检查+自动修复工具） ==========
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.2
@@ -94,10 +90,10 @@ repos:
     hooks:
       - id: python-no-assertionerror
         name: check for AssertionError
-        description: "Check for usage of `AssertionError`"
-        entry: (?x)(                          # 使用正则匹配以下内容
-          raise\sAssertionError|             # 检查是否 `raise AssertionError`
-          except.*AssertionError             # 检查是否处理 AssertionError 异常
+        description: "Check for usage of `AssertionError`"  # 使用正则匹配以下内容,检查是否 `raise AssertionError`,检查是否处理 AssertionError 异常
+        entry: (?x)(
+          raise\sAssertionError|
+          except.*AssertionError
           )
         language: pygrep
         types: [python]
