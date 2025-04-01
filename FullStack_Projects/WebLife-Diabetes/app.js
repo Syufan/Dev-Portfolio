@@ -92,7 +92,8 @@ app.get('/404', (req, res) => {
 })
 
 // Tells the app to listen on port 3000 and logs that information to the console.
-app.listen(process.env.PORT || 3000, () => {
-    console.log('Glucope app is listening on port 3000!')
-})
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Glucope app is listening on port ${PORT}!`);
+});
 // trigger test
