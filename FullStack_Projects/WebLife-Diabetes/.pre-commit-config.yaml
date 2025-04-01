@@ -9,7 +9,7 @@ repos:
       - id: check-merge-conflict
       - id: detect-private-key
 
-  # 可选：检查 git commit message 是否规范（如果你有规范要求）
+  # 检查 git commit message 是否规范
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:
