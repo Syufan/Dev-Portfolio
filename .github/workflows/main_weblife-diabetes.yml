@@ -37,23 +37,23 @@ jobs:
         run: pip install pre-commit
 
       # 执行 pre-commit hook 检查代码质量
+      # 执行 pre-commit 并将输出捕获到 OUT 变量中（包括标准输出与错误）
       - name: Run pre-commit hooks
         run: |
-          # 执行 pre-commit 检查，并把输出捕获到变量 OUT 中（包括错误信息）
           OUT=$(pre-commit run --all-files 2>&1) || {
+          
+            # 如果 pre-commit 返回非 0（失败），进入此代码块
       
-            # 如果 pre-commit 执行失败了（退出码非 0），我们进入这里判断失败的原因
-      
-            # 检查输出中是否包含 “No files to check” 字样 —— 说明是没有文件需要检查
+            # 检查输出中是否包含 "No files to check" —— 如果是说明没有文件触发检查
             echo "$OUT" | grep -q "No files to check" && \
-              echo "✅ 没有文件需要检查，跳过 pre-commit，CI 继续" && exit 0
+              echo "No files to check, skip pre-commit and continue CI" && exit 0
       
-            # 如果不是“没有文件”的错误，而是其他真正的错误（如格式错误等），就打印错误并让 CI 失败
+            # 否则为真正的检查失败（如格式、敏感信息等），输出错误并中断 CI
             echo "$OUT"
             exit 1
           }
       
-          # 如果 pre-commit 成功运行了（没有任何问题），就正常输出结果
+          # 如果 pre-commit 正常执行完毕，输出执行结果
           echo "$OUT"
     
       # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
