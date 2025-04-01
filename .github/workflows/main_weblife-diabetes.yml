@@ -1,59 +1,79 @@
+# Workflow 的名称，会显示在 GitHub Actions 页面上
 name: Build and Deploy WebLife-Diabetes to Azure
 
+# 触发条件：当对 main 分支有 push，且路径在 FullStack_Projects/WebLife-Diabetes 下时触发
+# 也支持手动触发（workflow_dispatch）
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+    paths:
+      - 'FullStack_Projects/WebLife-Diabetes/**'  # 仅当此目录下有改动时才触发
+  workflow_dispatch:  # 手动触发按钮（在 GitHub Actions 页面上点击运行）
 
+# 定义两个 Job：build 和 deploy
 jobs:
+  # ==================== Build Job ====================
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # 使用 GitHub 托管的 Ubuntu 环境
+
+    # 设置默认工作目录为 WebLife-Diabetes 文件夹
     defaults:
       run:
         working-directory: FullStack_Projects/WebLife-Diabetes
 
     steps:
+      # 第一步：拉取 Git 仓库中的代码
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 安装指定版本的 Node.js（用于运行前端脚本或 Node.js 服务器）
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
       - name: Install dependencies
         run: npm ci
 
+      # 运行 JS 测试。如果测试不存在也不会报错（兼容性更好）
       - name: Run JS Tests
         run: npm test || echo "No JS tests found"
 
+      # 打包项目目录为 release.zip。注意这里切换到上一级目录进行压缩
       - name: Zip for deployment
         run: |
           cd ..
           zip -r release.zip WebLife-Diabetes -x "**/node_modules/*" "**/.git/*" "**/*.class" "**/bin/*"
+          # 排除不必要的内容，减少 zip 包大小
 
+      # 上传构建产物，以供后续 deploy job 下载使用
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release
-          path: FullStack_Projects/release.zip
+          name: release               # 上传包的名字
+          path: FullStack_Projects/release.zip  # 注意路径对应压缩包的生成位置
 
+  # ==================== Deploy Job ====================
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build  # 依赖 build job 成功执行完毕
 
     steps:
+      # 下载上一步上传的 release.zip 构建产物
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: release
 
+      # 解压缩并列出目录内容，用于检查实际压缩进去的文件
       - name: Unzip and check content
         run: unzip release.zip && ls -la WebLife-Diabetes
 
+      # 使用 Azure Web App 的官方 Action，将项目部署上去
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: WEBLIFE-DIABETES
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: WebLife-Diabetes
+          app-name: WEBLIFE-DIABETES  # 你在 Azure 创建的 App 名
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # 发布凭据，从 Azure 导出后存入 GitHub Secret
+          package: WebLife-Diabetes   # 解压后的文件夹路径，指定部署的内容目录
