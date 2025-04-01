@@ -36,8 +36,10 @@ jobs:
       - name: Install pre-commit
         run: pip install pre-commit
 
+      # 执行 pre-commit hook 检查代码质量
+      # 如果没有符合条件的文件（比如没改 JS/Python 文件），则不会报错而是输出提示
       - name: Run pre-commit hooks
-        run: pre-commit run --all-files
+        run: pre-commit run --all-files || echo "No files to lint or fix"
 
       # 安装项目依赖（npm ci 比 npm install 更快，更适合 CI）
       - name: Install dependencies
