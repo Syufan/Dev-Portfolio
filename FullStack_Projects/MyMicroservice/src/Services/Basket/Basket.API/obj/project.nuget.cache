@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lOVbKsYuB2Y=",
+  "dgSpecHash": "UYaMmCF/mjM=",
   "success": true,
-  "projectFilePath": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Basket/Basket.API/Basket.API.csproj",
+  "projectFilePath": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/Basket.API.csproj",
   "expectedPackageFiles": [
     "/Users/yufan/.nuget/packages/masstransit/8.5.0/masstransit.8.5.0.nupkg.sha512",
     "/Users/yufan/.nuget/packages/masstransit.abstractions/8.5.0/masstransit.abstractions.8.5.0.nupkg.sha512",

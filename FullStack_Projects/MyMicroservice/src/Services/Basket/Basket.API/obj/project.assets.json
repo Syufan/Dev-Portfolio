@@ -8898,11 +8898,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Basket/Basket.API/Basket.API.csproj",
+      "projectUniqueName": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/Basket.API.csproj",
       "projectName": "Basket.API",
-      "projectPath": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Basket/Basket.API/Basket.API.csproj",
+      "projectPath": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/Basket.API.csproj",
       "packagesPath": "/Users/yufan/.nuget/packages/",
-      "outputPath": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Basket/Basket.API/obj/",
+      "outputPath": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/yufan/.nuget/NuGet/NuGet.Config"
