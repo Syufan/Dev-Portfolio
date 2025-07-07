@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Cwj4KiHBTqw=",
+  "success": true,
+  "projectFilePath": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Shared/Events/Shared.csproj",
+  "expectedPackageFiles": [
+    "/Users/yufan/.nuget/packages/microsoft.netcore.app.ref/8.0.13/microsoft.netcore.app.ref.8.0.13.nupkg.sha512",
+    "/Users/yufan/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.13/microsoft.aspnetcore.app.ref.8.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}

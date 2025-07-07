@@ -252,4 +252,44 @@ Basket开发
                 await _database.KeyDeleteAsync(username);
             }
         }
+    7.Models的开发-> Controllers 开发 -> Program.cs 注册
 
+
+
+
+Ordering开发
+    Ordering.API/
+    │
+    ├── appsettings.json           ⬅ Redis 地址配置
+    ├── Program.cs                 ⬅ 注册 Redis + Repository
+    ├── Models/
+    │   ├──         ⬅ 用户购物车结构
+    │   └──     ⬅ 购物车内商品结构
+    │
+    ├── Data/
+    │   ├──    ⬅ 接口定义
+    │   └──     ⬅ Redis 实现
+    │
+    └── Controllers/
+        └──     ⬅ API 入口
+
+1. 创建一个新的 Web API 项目
+    dotnet new webapi -n Ordering.API
+    cd Ordering.API
+
+2. 创建文件夹
+    mkdir Controllers
+    mkdir Data
+    mkdir Models
+
+3. 添加必要依赖
+    数据库支持
+    dotnet add package Microsoft.EntityFrameworkCore
+    dotnet add package Microsoft.EntityFrameworkCore.Design
+    dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+    Rabbit 消息队列
+    dotnet add package MassTransit
+    dotnet add package MassTransit.AspNetCore
+    dotnet add package MassTransit.RabbitMQ
+
+4. 创建 OrderItem.cs -> Order.cs 

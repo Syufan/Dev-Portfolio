@@ -75,6 +75,8 @@
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/bin/Debug/net9.0/System.Security.Permissions.dll
+/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/bin/Debug/net9.0/Shared.dll
+/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/bin/Debug/net9.0/Shared.pdb
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/obj/Debug/net9.0/Basket.API.csproj.AssemblyReference.cache
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/obj/Debug/net9.0/Basket.API.GeneratedMSBuildEditorConfig.editorconfig
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Basket/Basket.API/obj/Debug/net9.0/Basket.API.AssemblyInfoInputs.cache

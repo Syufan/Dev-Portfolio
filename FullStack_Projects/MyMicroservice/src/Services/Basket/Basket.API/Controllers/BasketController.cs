@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Basket.API.Models;
 using Basket.API.Data;
 using MassTransit;
+using Shared.Events;
 
 namespace Basket.API.Controllers;
 
@@ -45,29 +46,43 @@ public class BasketController : ControllerBase
     [HttpPost("Checkout")]
     public async Task<IActionResult> CheckoutBasket([FromBody] BasketCheckout basketCheckout)//方法名 + 参数类型 + 参数名
     {
-        // 获取购物车
-        var basket = await _repository.GetBasketAsync(basketCheckout.Username);
-        if(basket == null){
-            return BadRequest("Basket not found");
-        }
-
-        // 创建结账事件
-        var checkoutEvent = new
+        try
         {
-            basketCheckout.Username,
-            basketCheckout.Address,
-            basketCheckout.PaymentMethod,
-            basketCheckout.Email,
-            basket.TotalPrice,
-            Items = basket.Items
-        };
+            if (basketCheckout == null || string.IsNullOrEmpty(basketCheckout.Username))
+                return BadRequest("Invalid checkout data");
 
-        // 发布结账事件 
-        await _publishEndpoint.Publish(checkoutEvent);
+            var basket = await _repository.GetBasketAsync(basketCheckout.Username);
+            if (basket == null)
+            {
+                return BadRequest("Basket not found");
+            }
 
-        // 删除购物车
-        await _repository.DeleteBasketAsync(basketCheckout.Username);
+            var checkoutEvent = new SharedBasketCheckout
+            {
+                Username = basketCheckout.Username,
+                Address = basketCheckout.Address,
+                PaymentMethod = basketCheckout.PaymentMethod,
+                Email = basketCheckout.Email,
+                TotalPrice = basket.TotalPrice,
+                Items = basket.Items.Select(item => new BasketItem
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    Price = item.Price
+                }).ToList()
+            };
 
-        return Accepted();
+            await _publishEndpoint.Publish(checkoutEvent);
+            Console.WriteLine("Publishing checkout event...");
+            await _repository.DeleteBasketAsync(basketCheckout.Username);
+
+            return Accepted();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Checkout error: {ex.Message}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 }
