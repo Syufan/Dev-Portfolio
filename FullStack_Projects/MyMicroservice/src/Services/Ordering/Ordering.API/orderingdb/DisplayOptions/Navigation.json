@@ -1,0 +1,14 @@
+{
+  "currentItem" : {
+    "databaseName" : "CatalogDB",
+    "objectType" : "Table",
+    "schemaName" : "public",
+    "tableName" : "Products"
+  },
+  "currentViewType" : 0,
+  "sourceListNavigationState" : {
+    "expandedItems" : [
+
+    ]
+  }
+}

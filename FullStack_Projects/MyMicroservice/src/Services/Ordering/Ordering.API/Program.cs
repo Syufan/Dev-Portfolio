@@ -29,7 +29,7 @@ builder.Services.AddMassTransit(x =>
 });
 
 builder.Services.AddDbContext<OrderingDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("OrderingConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("OrderingConnectionString")));
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 

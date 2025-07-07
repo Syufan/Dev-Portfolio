@@ -293,3 +293,8 @@ Ordering开发
     dotnet add package MassTransit.RabbitMQ
 
 4. 创建 OrderItem.cs -> Order.cs 
+
+5. 数据库搭建完后
+    生成迁移文件，执行迁移，创建数据库表结构
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update

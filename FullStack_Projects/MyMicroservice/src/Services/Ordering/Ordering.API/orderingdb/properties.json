@@ -1,0 +1,28 @@
+{
+  "connection" : {
+    "postgres" : {
+      "database" : "orderingdb",
+      "host" : "127.0.0.1",
+      "password" : {
+        "keychainItemAccount" : "7D7A617D-AC94-473E-A1ED-924401BD31C7",
+        "keychainItemService" : "Postico Saved Password",
+        "type" : "keychain"
+      },
+      "port" : 5432,
+      "preconnectScript" : {
+        "enabled" : false
+      },
+      "user" : "postgres"
+    },
+    "ssh" : {
+      "enabled" : false
+    }
+  },
+  "displayName" : "orderingdb",
+  "startupQuery" : {
+    "enabled" : false
+  },
+  "type" : "server",
+  "uuid" : "1B9B6453-56CD-424A-AC52-F56444535ADE",
+  "version" : 2
+}

@@ -1,5 +1,9 @@
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/appsettings.Development.json
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/appsettings.json
+/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/orderingdb/DisplayOptions/catalogdb.public.products_8B82C9DE44.json
+/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/orderingdb/DisplayOptions/catalogdb.public.__efmigrationshistory_A42E2B6345.json
+/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/orderingdb/DisplayOptions/Navigation.json
+/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/orderingdb/properties.json
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/Ordering.API.staticwebassets.endpoints.json
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/Ordering.API
 /Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Ordering/Ordering.API/bin/Debug/net9.0/Ordering.API.deps.json

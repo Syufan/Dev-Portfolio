@@ -17,31 +17,42 @@ public class BasketCheckoutConsumer : IConsumer<SharedBasketCheckout>
 
     public async Task Consume(ConsumeContext<SharedBasketCheckout> context)
     {
-        var basket = context.Message;
+        try{
+            
+            var basket = context.Message;
 
-        // 映射 BasketCheckout 到 Order
-        var order = new Order
-        {
-            Username = basket.Username,
-            OrderDate = DateTime.UtcNow,
-            CVV = "123", // 示例值，实际应来自 BasketCheckout
-            ShippingAddress = new Address
+            // 映射 BasketCheckout 到 Order
+            var order = new Order
             {
-                Street = basket.Address, // 假定 basket.Address 有
-                City = "Unknown", // 示例
-                State = "Unknown",
-                ZipCode = "00000",
-                Country = "Unknown"
-            },
-            CardInformation = new Card
-            {
-                CardName = "User Card",
-                CardNumber = "0000-0000-0000-0000",
-                Expiration = "12/30"
-            }
-        };
+                Username = basket.Username,
+                OrderDate = DateTime.UtcNow,
+                FirstName = "test",
+                LastName = "user",
+                CVV = "123", // 示例值，实际应来自 BasketCheckout
+                ShippingAddress = new Address
+                {
+                    Street = basket.Address, // 假定 basket.Address 有
+                    City = "Unknown", // 示例
+                    State = "Unknown",
+                    ZipCode = "00000",
+                    Country = "Unknown"
+                },
+                CardInformation = new Card
+                {
+                    CardName = "User Card",
+                    CardNumber = "0000-0000-0000-0000",
+                    Expiration = "12/30"
+                }
+            };
 
-        // 保存订单
-        await _orderRepository.CreateOrderAsync(order);
+            // 保存订单
+            await _orderRepository.CreateOrderAsync(order);
+
+
+        }catch (Exception ex){
+            Console.WriteLine("❌ Error consuming message: " + ex.Message);
+            Console.WriteLine(ex.StackTrace);  // 可选
+            throw; // 让它继续抛错，保持 R-FAULT 状态
+        }
     }
 }

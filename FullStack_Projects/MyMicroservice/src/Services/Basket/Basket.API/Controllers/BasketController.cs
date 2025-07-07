@@ -54,7 +54,7 @@ public class BasketController : ControllerBase
             var basket = await _repository.GetBasketAsync(basketCheckout.Username);
             if (basket == null)
             {
-                return BadRequest("Basket not found");
+                return BadRequest("Basket is empty");
             }
 
             var checkoutEvent = new SharedBasketCheckout
