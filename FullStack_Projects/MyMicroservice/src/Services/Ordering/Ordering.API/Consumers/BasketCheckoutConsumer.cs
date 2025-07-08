@@ -42,7 +42,14 @@ public class BasketCheckoutConsumer : IConsumer<SharedBasketCheckout>
                     CardName = "User Card",
                     CardNumber = "0000-0000-0000-0000",
                     Expiration = "12/30"
-                }
+                },
+                Items = basket.Items.Select(i => new OrderItem
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.ProductName,
+                    Quantity = i.Quantity,
+                    Price = i.Price
+                }).ToList()
             };
 
             // 保存订单

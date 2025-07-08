@@ -32,6 +32,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var catalogBaseUrl = builder.Configuration["CatalogService:BaseUrl"]
+builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>{
+    c.BaseAddress = new Uri(catalogBaseUrl);
+});
+
 // 构建应用对象并配置中间件
 var app = builder.Build();
 
@@ -45,5 +50,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+if(!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error");
+};
 
 app.Run();

@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Basket.API.Models;
 using Basket.API.Data;
 using MassTransit;
+using System.Linq;
 using Shared.Events;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Basket.API.Controllers;
 
@@ -12,18 +14,38 @@ public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _repository;
     private readonly IPublishEndpoint _publishEndpoint;//MassTransit 框架提供的接口，用于 向消息中间件（RabbitMQ）发送消息
+    private readonly ILogger<BasketController> _logger;
+    private readonly ICatalogService _catalogService;
 
     // 构造函数注入依赖
-    public BasketController(IBasketRepository repository, IPublishEndpoint publishEndpoint){
+    public BasketController(
+        IBasketRepository repository, 
+        IPublishEndpoint publishEndpoint, 
+        ILogger<BasketController> logger, 
+        ICatalogService catalogService)
+    {
         _repository = repository;
         _publishEndpoint = publishEndpoint;
+        _logger = logger;
+        _catalogService = catalogService;
     }
 
     // 获取购物车
     [HttpGet("{username}")]
     public async Task<ActionResult<ShoppingCart>> GetBasket(string username){
-        var basket = await _repository.GetBasketAsync(username);
-        return Ok(basket ?? new ShoppingCart { Username = username });
+        var basket = await _repository.GetBasketAsync(username) 
+           ?? new ShoppingCart { Username = username };
+        
+        foreach (var item in basket.Items)
+        {
+            var product = await _catalogService.GetCatalogItemByIdAsync(item.ProductId);
+            if (product != null)
+            {   
+                item.ProductName = product.Name;
+                item.Price = product.Price;
+            }
+        }
+        return Ok(basket);
     }
 
     // 更新购物车
@@ -51,11 +73,25 @@ public class BasketController : ControllerBase
             if (basketCheckout == null || string.IsNullOrEmpty(basketCheckout.Username))
                 return BadRequest("Invalid checkout data");
 
-            var basket = await _repository.GetBasketAsync(basketCheckout.Username);
-            if (basket == null)
+            var basket = await _repository.GetBasketAsync(basketCheckout.Username);//获取当前购物车
+            
+            if (basket == null || !basket.Items.Any())
             {
                 return BadRequest("Basket is empty");
             }
+            //每个购物项（更新商品名和最新价格）
+            foreach (var item in basket.Items)
+            {
+                var product = await _catalogService.GetCatalogItemByIdAsync(item.ProductId);
+                if (product != null)
+                {
+                    item.ProductName = product.Name;
+                    item.Price = product.Price;
+                }
+            }
+
+            var CheckedTotalPrice = basket.Items.Sum(i=> i.Price *i.Quantity);
+
 
             var checkoutEvent = new SharedBasketCheckout
             {
@@ -63,7 +99,7 @@ public class BasketController : ControllerBase
                 Address = basketCheckout.Address,
                 PaymentMethod = basketCheckout.PaymentMethod,
                 Email = basketCheckout.Email,
-                TotalPrice = basket.TotalPrice,
+                TotalPrice = CheckedTotalPrice,
                 Items = basket.Items.Select(item => new BasketItem
                 {
                     ProductId = item.ProductId,
@@ -75,6 +111,7 @@ public class BasketController : ControllerBase
 
             await _publishEndpoint.Publish(checkoutEvent);
             Console.WriteLine("Publishing checkout event...");
+
             await _repository.DeleteBasketAsync(basketCheckout.Username);
 
             return Accepted();
@@ -84,5 +121,17 @@ public class BasketController : ControllerBase
             Console.WriteLine($"Checkout error: {ex.Message}");
             return StatusCode(500, "Internal server error");
         }
+    }
+
+    [Route("/error")]
+    public IActionResult Error()
+    {
+        var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+        var exception = context?.Error;
+        return Problem(
+            title: "Unexpected Error",
+            statusCode: 500,
+            detail: exception?.Message
+        );
     }
 }
