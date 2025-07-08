@@ -37,6 +37,12 @@ builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>{
     c.BaseAddress = new Uri(catalogBaseUrl);
 });
 
+var discountBaseUrl = builder.Configuration["DiscountService:BaseUrl"];
+builder.Services.AddHttpClient<IDiscountService, DiscountService>(client =>
+{
+    client.BaseAddress = new Uri(discountBaseUrl);
+});
+
 // 构建应用对象并配置中间件
 var app = builder.Build();
 

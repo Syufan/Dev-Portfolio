@@ -16,18 +16,21 @@ public class BasketController : ControllerBase
     private readonly IPublishEndpoint _publishEndpoint;//MassTransit 框架提供的接口，用于 向消息中间件（RabbitMQ）发送消息
     private readonly ILogger<BasketController> _logger;
     private readonly ICatalogService _catalogService;
+    private readonly IDiscountService _discountService;
 
     // 构造函数注入依赖
     public BasketController(
         IBasketRepository repository, 
         IPublishEndpoint publishEndpoint, 
         ILogger<BasketController> logger, 
-        ICatalogService catalogService)
+        ICatalogService catalogService,
+        IDiscountService discountService)
     {
         _repository = repository;
         _publishEndpoint = publishEndpoint;
         _logger = logger;
         _catalogService = catalogService;
+        _discountService = discountService;
     }
 
     // 获取购物车
@@ -42,9 +45,15 @@ public class BasketController : ControllerBase
             Console.WriteLine($"item.ProductId: {item.ProductId}");
             if (product != null)
             {   
+                var discountProduct = await _discountService.GetDiscountPriceForProduct(item.ProductId);
                 Console.WriteLine("yes");
+                
                 item.ProductName = product.Name;
                 item.Price = product.Price;
+                if (discountProduct!=null)
+                {
+                    item.Price = discountProduct.price;
+                }
             }
         }
         return Ok(basket);
@@ -82,19 +91,36 @@ public class BasketController : ControllerBase
                 return BadRequest("Basket is empty");
             }
             Console.WriteLine("Finish Check basket...");
+
             //每个购物项（更新商品名和最新价格）
             foreach (var item in basket.Items)
             {
                 var product = await _catalogService.GetCatalogItemByIdAsync(item.ProductId);
                 if (product != null)
                 {
+                    var discountProduct = await _discountService.GetDiscountPriceForProduct(item.ProductId);
                     item.ProductName = product.Name;
                     item.Price = product.Price;
+                    if (discountProduct!=null)
+                    {
+                        item.Price = discountProduct.price;
+                    }
                 }
             }
+
             Console.WriteLine("Finish update Iteam...");
 
             var CheckedTotalPrice = basket.Items.Sum(i=> i.Price *i.Quantity);
+            decimal voucherDiscount = 0;
+            if (!string.IsNullOrEmpty(basketCheckout.VoucherCode))
+            {
+                var voucher = await _discountService.GetVoucherByIdAsync(basketCheckout.VoucherCode);
+                if (voucher != null && voucher.Value > 0)
+                {
+                     voucherDiscount = voucher.Value;
+                     CheckedTotalPrice = CheckedTotalPrice - voucherDiscount;
+                }
+            }
             Console.WriteLine("Finish Checked Total Price...");
 
             var checkoutEvent = new SharedBasketCheckout

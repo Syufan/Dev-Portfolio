@@ -45,6 +45,9 @@ namespace Ordering.API.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");

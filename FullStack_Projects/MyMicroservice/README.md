@@ -298,7 +298,8 @@ Ordering开发
     生成迁移文件，执行迁移，创建数据库表结构
     dotnet ef migrations add InitialCreate
     dotnet ef database update
-
+    清库
+    rm -rf Migrations
 
 docker
 docker-compose up -d 启动
@@ -306,3 +307,7 @@ docker-compose up -d 启动
 docker-compose down -v 删除
 
 docker system prune -a --volumes 删除未使用资源
+
+docker volume ls 检查资源
+
+docker volume rm xxx  删除

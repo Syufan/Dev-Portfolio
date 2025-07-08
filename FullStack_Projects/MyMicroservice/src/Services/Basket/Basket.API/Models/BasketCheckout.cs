@@ -6,5 +6,6 @@ public class BasketCheckout{
     public string PaymentMethod { get; set; }
     public string Email { get; set; }
     public decimal TotalPrice { get; set; }
+    public string? VoucherCode { get; set; }
     public List<ShoppingCartItem> Items { get; set; }
 }

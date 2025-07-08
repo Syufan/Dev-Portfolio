@@ -29,6 +29,7 @@ public class BasketCheckoutConsumer : IConsumer<SharedBasketCheckout>
                 FirstName = "test",
                 LastName = "user",
                 CVV = "123", // 示例值，实际应来自 BasketCheckout
+                TotalPrice = basket.TotalPrice,
                 ShippingAddress = new Address
                 {
                     Street = basket.Address, // 假定 basket.Address 有

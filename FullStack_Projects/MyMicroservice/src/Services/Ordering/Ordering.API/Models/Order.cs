@@ -11,6 +11,7 @@ public class Order
     public Card CardInformation { get; set; } = new();
     public string CVV{get; set;}
     public Address ShippingAddress { get; set; } = new();
+    public decimal TotalPrice { get; set; } 
 }
 
 public class Card
