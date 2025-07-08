@@ -8,9 +8,7 @@
     ".NETCoreApp,Version=v9.0": {
       "Catalog.API/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": "9.0.2",
           "Microsoft.EntityFrameworkCore.Design": "9.0.6",
-          "Microsoft.EntityFrameworkCore.InMemory": "9.0.4",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
           "Swashbuckle.AspNetCore": "8.1.1"
         },
@@ -23,17 +21,6 @@
           "lib/net6.0/Humanizer.dll": {
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
-          }
-        }
-      },
-      "Microsoft.AspNetCore.OpenApi/9.0.2": {
-        "dependencies": {
-          "Microsoft.OpenApi": "1.6.23"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
-            "assemblyVersion": "9.0.2.0",
-            "fileVersion": "9.0.225.6704"
           }
         }
       },
@@ -379,19 +366,6 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.InMemory/9.0.4": {
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "9.0.6",
-          "Microsoft.Extensions.Caching.Memory": "9.0.6",
-          "Microsoft.Extensions.Logging": "9.0.6"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
-            "assemblyVersion": "9.0.4.0",
-            "fileVersion": "9.0.425.16310"
-          }
-        }
-      },
       "Microsoft.EntityFrameworkCore.Relational/9.0.6": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "9.0.6",
@@ -696,13 +670,6 @@
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.OpenApi/9.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-JUndpjRNdG8GvzBLH/J4hen4ehWaPcshtiQ6+sUs1Bcj3a7dOsmWpDloDlpPeMOVSlhHwUJ3Xld0ClZjsFLgFQ==",
-      "path": "microsoft.aspnetcore.openapi/9.0.2",
-      "hashPath": "microsoft.aspnetcore.openapi.9.0.2.nupkg.sha512"
-    },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
       "type": "package",
       "serviceable": true,
@@ -793,13 +760,6 @@
       "sha512": "sha512-6xabdZH2hOqSocjDIOd0FZLslH7kDX8ODY4lBR298GwkAkxuItjNgZHuRbTi9hmfDS2Hh02r+d17Fa8XT4lKLQ==",
       "path": "microsoft.entityframeworkcore.design/9.0.6",
       "hashPath": "microsoft.entityframeworkcore.design.9.0.6.nupkg.sha512"
-    },
-    "Microsoft.EntityFrameworkCore.InMemory/9.0.4": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-VHjUwjvN8UKjb8xtKJ/o+dc9tTeHOW3QzlfkzX3JrUspLkPIjwMdZCcw6eS4gsFjby0NFkcXBjHtrgTjVOfO5Q==",
-      "path": "microsoft.entityframeworkcore.inmemory/9.0.4",
-      "hashPath": "microsoft.entityframeworkcore.inmemory.9.0.4.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Relational/9.0.6": {
       "type": "package",

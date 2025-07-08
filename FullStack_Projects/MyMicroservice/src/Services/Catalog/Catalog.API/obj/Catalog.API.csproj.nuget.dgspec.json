@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj": {}
+    "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj": {}
   },
   "projects": {
-    "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj": {
+    "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj",
+        "projectUniqueName": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj",
         "projectName": "Catalog.API",
-        "projectPath": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj",
+        "projectPath": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Catalog/Catalog.API/Catalog.API.csproj",
         "packagesPath": "/Users/yufan/.nuget/packages/",
-        "outputPath": "/Users/yufan/Desktop/projects/MyMicroservice/src/Services/Catalog/Catalog.API/obj/",
+        "outputPath": "/Users/yufan/Desktop/github/Dev-Portfolio/FullStack_Projects/MyMicroservice/src/Services/Catalog/Catalog.API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/yufan/.nuget/NuGet/NuGet.Config"
@@ -44,19 +44,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[9.0.2, )"
-            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.6, )"
-            },
-            "Microsoft.EntityFrameworkCore.InMemory": {
-              "target": "Package",
-              "version": "[9.0.4, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",

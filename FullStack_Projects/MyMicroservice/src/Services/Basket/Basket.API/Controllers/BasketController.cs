@@ -39,8 +39,10 @@ public class BasketController : ControllerBase
         foreach (var item in basket.Items)
         {
             var product = await _catalogService.GetCatalogItemByIdAsync(item.ProductId);
+            Console.WriteLine($"item.ProductId: {item.ProductId}");
             if (product != null)
             {   
+                Console.WriteLine("yes");
                 item.ProductName = product.Name;
                 item.Price = product.Price;
             }
@@ -79,6 +81,7 @@ public class BasketController : ControllerBase
             {
                 return BadRequest("Basket is empty");
             }
+            Console.WriteLine("Finish Check basket...");
             //每个购物项（更新商品名和最新价格）
             foreach (var item in basket.Items)
             {
@@ -89,9 +92,10 @@ public class BasketController : ControllerBase
                     item.Price = product.Price;
                 }
             }
+            Console.WriteLine("Finish update Iteam...");
 
             var CheckedTotalPrice = basket.Items.Sum(i=> i.Price *i.Quantity);
-
+            Console.WriteLine("Finish Checked Total Price...");
 
             var checkoutEvent = new SharedBasketCheckout
             {
@@ -123,7 +127,7 @@ public class BasketController : ControllerBase
         }
     }
 
-    [Route("/error")]
+    [HttpGet("/error")]
     public IActionResult Error()
     {
         var context = HttpContext.Features.Get<IExceptionHandlerFeature>();

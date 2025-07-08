@@ -1,0 +1,16 @@
+services:
+  orderingdb:
+    image: postgres:15
+    container_name: ordering_postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: OrderingDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - ordering_data:/var/lib/postgresql/data
+
+volumes:
+  ordering_data:

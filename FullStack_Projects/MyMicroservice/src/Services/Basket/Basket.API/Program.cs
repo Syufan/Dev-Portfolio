@@ -32,7 +32,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var catalogBaseUrl = builder.Configuration["CatalogService:BaseUrl"]
+var catalogBaseUrl = builder.Configuration["CatalogService:BaseUrl"];
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>{
     c.BaseAddress = new Uri(catalogBaseUrl);
 });
