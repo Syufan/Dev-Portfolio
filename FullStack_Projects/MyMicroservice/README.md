@@ -1,3 +1,177 @@
+E-Commerce Microservices Backend (.NET Core)
+
+This project is a practical full-stack SaaS-oriented microservices backend tailored for e-commerce scenarios. It demonstrates a modular and cloud-ready system for managing products, shopping carts, discounts, and orders.
+
+⸻
+
+🌟 Project Overview
+
+This system simulates a SaaS e-commerce platform where merchants and customers interact through core modules:
+	•	Catalog Service: Product listing and CRUD
+	•	Basket Service: User shopping carts with Redis caching
+	•	Discount Service: Coupons and discount strategies
+	•	Ordering Service: Checkout workflows and order tracking
+
+The monolithic architecture is avoided due to its limitations in scalability and maintainability. Instead, we adopt a microservices-based architecture for better modularity and cloud-native readiness.
+
+⸻
+
+🧱 Tech Stack
+
+Core Technologies
+	•	Backend Framework: ASP.NET Core Web API
+	•	Database: PostgreSQL with Entity Framework Core (EF Core)
+	•	Caching: Redis (for Basket service)
+	•	Message Queue: RabbitMQ (for event-driven Ordering service)
+	•	API Gateway: Ocelot (optional for aggregation/routing)
+	•	Documentation & Testing: Swagger
+	•	Containerization: Docker, Docker Compose
+
+Why These Choices
+	•	ASP.NET Core: High performance, strong typing, DI, good for long-term SaaS projects
+	•	PostgreSQL: Robust transaction support, ideal for multi-party order flows
+	•	Redis: Low-latency cache for shopping carts
+	•	RabbitMQ: Async event-driven checkout integration
+
+⸻
+
+📐 Architecture
+	•	Microservices: Independently deployable, each with its own DB
+	•	Event-Driven Design: Loose coupling via message brokers
+	•	RESTful APIs: Internal/external service communication
+	•	Domain Isolation: Services encapsulate domain-specific logic
+
+Service Interaction (Typical User Flow)
+	1.	Frontend fetches products from Catalog.API
+	2.	User adds products to Basket.API
+	3.	Discount is validated via Discount.API
+	4.	Checkout handled by Ordering.API → fetches data from all services and confirms order
+
+⸻
+
+🧩 Service Responsibilities
+
+📦 Catalog.API
+	•	Manages product CRUD
+	•	Exposes /api/products
+	•	Uses PostgreSQL + EF Core
+
+🛒 Basket.API
+	•	Stores user carts in Redis
+	•	Supports add/remove/clear/update
+	•	Queries Catalog for product data
+
+🎟️ Discount.API
+	•	Manages product or user-based discounts
+	•	Offers endpoints for coupon validation
+	•	Can be expanded with gRPC or REST
+
+📑 Ordering.API
+	•	Processes order placement
+	•	Persists order info (status, items, totals)
+	•	Uses RabbitMQ to decouple checkout from real-time sync
+
+⸻
+
+⚙ Setup & Development
+
+✅ Prerequisites
+	•	Docker + Docker Compose
+	•	PostgreSQL instance
+	•	.NET SDK (>=7.0)
+
+🚀 Run the Services
+
+    docker-compose up -d
+
+    To stop and clean volumes:
+
+    docker-compose down -v
+
+    Clear all Docker cache (optional):
+
+    docker system prune -a --volumes
+
+
+⸻
+
+🔧 Example: Catalog.API Setup
+	1.	Create the project:
+
+        dotnet new webapi -n Catalog.API
+        cd Catalog.API
+
+	2.	Add EF Core and PostgreSQL support:
+
+        dotnet add package Microsoft.EntityFrameworkCore
+
+        dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+
+	3.	Configure DB Context and Models:
+
+	    Product.cs: ID, Name, Description, Price
+	    CatalogContext.cs: DbSet
+
+	4.	Register EF Core in Program.cs:
+
+        builder.Services.AddDbContext<CatalogContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("CatalogConnection")));
+
+	5.	Add Swagger support and run migrations:
+
+        dotnet ef migrations add InitialCreate
+
+        dotnet ef database update
+
+	6.	Run API:
+
+        dotnet run
+
+
+⸻
+
+📚 Resources
+
+    Original Reference: aspnetrun/run-aspnetcore-microservices
+
+⸻
+
+✅ TODO (Suggestions for Enhancement)
+	•	Add authentication (e.g., IdentityServer)
+	•	Implement API Gateway
+	•	Add integration tests / TDD
+	•	Improve frontend (React/Vue frontend demo)
+	•	Setup CI/CD pipelines (GitHub Actions)
+
+⸻
+
+This project serves as both a learning path and a scalable starter template for modern distributed systems using .NET Core. Contributions and feedback welcome.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 项目介绍：
 
     本项目是一个 面向电商场景的全栈微服务实战项目
@@ -311,3 +485,6 @@ docker system prune -a --volumes 删除未使用资源
 docker volume ls 检查资源
 
 docker volume rm xxx  删除
+
+
+https://github.com/aspnetrun/run-aspnetcore-microservices?tab=readme-ov-file
