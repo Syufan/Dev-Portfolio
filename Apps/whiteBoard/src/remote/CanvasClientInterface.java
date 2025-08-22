@@ -7,6 +7,7 @@ import java.util.Set;
 
 public interface CanvasClientInterface extends Remote{
 
+	// ---Related with User--- //
 	// Assign manager
 	public void assignManager() throws RemoteException;
 
@@ -25,35 +26,44 @@ public interface CanvasClientInterface extends Remote{
 	// For Permission
 	public boolean hasPermission() throws RemoteException;
 
+	// Ask manager to approve
+	public void askManagerApproval(CanvasClientInterface client) throws RemoteException;
+
+	// ---Client List--- //
 	// Update client list
 	public void updateUserList(Set<CanvasClientInterface> clientsList) throws RemoteException;
 
-	// Update canvas
-	public void updateCanvas(CanvasMsgInterface message)throws RemoteException;
-	
 	// Kick user
 	public void notifyKicked() throws RemoteException;
 
 	// Close client UI
 	public void closeUI()throws RemoteException;
+	
+	// When the server shuts down, notify and close the client
+	public void serverShutdown() throws RemoteException;
 
-	// For chat
-	public void addChat(String message)throws RemoteException;
+	// ---Canvas--- //
+	// Update canvas
+	public void updateCanvas(CanvasMsgInterface message)throws RemoteException;
 
 	// Get current image
 	public byte[] getCurrentImage()throws RemoteException;
 
 	// Draw Image
 	public void drawImage(byte[] image)throws RemoteException;
-	
+
 	// Draw white board
 	public void drawWhiteBoard(CanvasServerInterface server)throws RemoteException,IOException;
-
+	
 	// Notify that a new canvas has been opened
 	public void newWhiteboard()throws RemoteException;
-
+	
 	// Notify that the file has been read
 	public void sendNotification()throws RemoteException;
+	
+	// ---Chat--- //
+	// For chat
+	public void addChat(String message)throws RemoteException;
 
 	// For chat send message to every one
 	public void receiveMessage(String Name,String message)throws RemoteException;
@@ -61,10 +71,8 @@ public interface CanvasClientInterface extends Remote{
 	// Use to notify client
 	public void receiveSystemMessage(String message) throws RemoteException;
 
-	// When the server shuts down, notify and close the client
-	public void serverShutdown() throws RemoteException;
 
-	// Ask manager to approve
-	public void askManagerApproval(CanvasClientInterface client) throws RemoteException;
+
+
 
 }

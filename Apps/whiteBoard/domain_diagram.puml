@@ -1,0 +1,37 @@
+@startuml
+
+package remote {
+    interface CanvasClientInterface
+    interface CanvasMsgInterface
+    interface CanvasServerInterface
+}
+
+package server {
+    class CanvasServer
+    class Manager
+    class StartServer
+}
+
+package client {
+    class Client
+    class Canvas
+    class Draw
+}
+
+' Relationships between client and server
+CanvasClientInterface <|.. Client
+CanvasMsgInterface <|.. Draw
+CanvasServerInterface <|.. CanvasServer
+
+' Server side relationships
+Manager --> CanvasServer : manages
+StartServer --> CanvasServer : starts
+
+' Client side relationships
+Client --> Canvas : owns
+Canvas --> Draw : uses
+Client --> CanvasServerInterface : communicates
+CanvasServer --> CanvasClientInterface : notifies
+CanvasServer --> CanvasMsgInterface : broadcasts
+
+@enduml

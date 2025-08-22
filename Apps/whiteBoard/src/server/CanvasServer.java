@@ -1,16 +1,17 @@
 package server;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Set;
 import javax.swing.JOptionPane;
+import java.util.Set;
+
+import remote.CanvasServerInterface;
 import remote.CanvasClientInterface;
 import remote.CanvasMsgInterface;
-import remote.CanvasServerInterface;
 
-public class CanvasServer extends UnicastRemoteObject implements CanvasServerInterface, Serializable{
+
+public class CanvasServer extends UnicastRemoteObject implements CanvasServerInterface{
 
 	private Manager manager;
 	
@@ -39,7 +40,6 @@ public class CanvasServer extends UnicastRemoteObject implements CanvasServerInt
 	        // If the client list is not empty, request approval from the manager
 	    	 try {
 	             approveUserJoin(client);
-
 	         } catch (IllegalStateException | IOException e) {
 	             System.out.println(e.getMessage());
 	         }

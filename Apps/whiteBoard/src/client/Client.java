@@ -70,7 +70,6 @@ public class Client extends UnicastRemoteObject implements CanvasClientInterface
 	public static void main(String[] args) throws RemoteException {
 		try {
 			//Look up the white board server from the RMI name registry
-			
 	        if (args.length != 2) {
 	            System.err.println("Usage: java client.Client <serverIPAddress> <serverPort>");
 	            return;
