@@ -63,3 +63,31 @@ The system leverages Java RMI (Remote Method Invocation) for real-time collabora
 	├── WhiteBoardClient.jar
 	├── WhiteBoardServer.jar
 	└── README.md
+
+
+
+
+
+
+### Further Improvement
+
+Currently, the Canvas class listens to user actions (mouse events) and directly calls server.broadcastCanvas(...).
+This design creates a tight coupling between the UI layer (Canvas) and the networking layer (Server).
+
+Problems with the current design
+	1.	Strong coupling – The Canvas is supposed to be a drawing component, but it also knows how to communicate with the server.
+	2.	Low flexibility – If the networking implementation changes (e.g., switching from RMI to WebSocket), the Canvas code must be modified.
+	3.	Harder testing – It is difficult to test the drawing logic independently, because it depends on a remote server object.
+
+Proposed Improvement
+
+Introduce an event handler interface to decouple drawing logic from server communication.
+	•	Define an interface (e.g., DrawEventHandler) that handles outgoing drawing events.
+	•	Let Canvas generate Draw messages and pass them to the handler instead of calling the server directly.
+	•	Let the Client class implement the handler and forward the messages to the server.
+
+Benefits
+	•	Single responsibility – Canvas only cares about drawing and UI events.
+	•	Better abstraction – Networking and server logic stay in the Client and Server classes.
+	•	Easier maintenance – Switching protocols (RMI → WebSocket) requires no changes to Canvas.
+	•	Improved testability – The drawing component can be tested with a mock handler without any server dependency.
