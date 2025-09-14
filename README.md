@@ -25,18 +25,18 @@ The system leverages Java RMI (Remote Method Invocation) for real-time collabora
 
 ### Features
 	1.	Real-Time Collaboration:
-		•Every user sees updates to the whiteboard as they happen
+		•	Every user sees updates to the whiteboard as they happen
 	2.	Role-Based Access:
-		•Manager can control session-level actions (create, open, save, close)
-		•Manager must approve new user join requests
-		•Manager can “kick out” any user if needed
+		•	Manager can control session-level actions (create, open, save, close)
+		•	Manager must approve new user join requests
+		•	Manager can “kick out” any user if needed
 	3.	Drawing & Editing:
-		•Lines, circles, rectangles, ovals, text insertion, eraser tool
-		•16 color options for creativity and clarity
+		•	Lines, circles, rectangles, ovals, text insertion, eraser tool
+		•	16 color options for creativity and clarity
 	4.	Chat System:
-		•Users can communicate with each other in real time via text messages
+		•	Users can communicate with each other in real time via text messages
 	5.	File Operations:
-		•Manager can save the current whiteboard state to a file and load from an existing file
+		•	Manager can save the current whiteboard state to a file and load from an existing file
 
 ### System Architecture
 	1.	RMI Communication
